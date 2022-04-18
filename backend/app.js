@@ -9,6 +9,8 @@ const placesRoutes = require("./routes/placesRoutes");
 
 const app = express();
 
+const path = require("path");
+
 // bodyparser is used to parse the body to make connection smoother
 app.use(bodyParser.json());
 
@@ -48,13 +50,12 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "unknown error" });
 });
 
-if (process.env.NODE_ENV === "production") {
-  const path = require("path");
+__dirname = path.resolve();
 
-  app.get("/", (req, res) => {
-    app.use(
-      express.static(path.resolve(__dirname, "frontend", "build"))
-    );
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/frontend/build")));
+
+  app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
   });
 }
@@ -65,7 +66,7 @@ mongoose
     "mongodb+srv://Sakshi:123@cluster0.79ts7.mongodb.net/test?retryWrites=true&w=majority"
   )
   .then(() => {
-    app.listen(PORT)|| 5000;
+    app.listen(process.env.PORT || 5000);
   })
   .catch((err) => {
     console.log(err);
