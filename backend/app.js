@@ -65,7 +65,7 @@ mongoose
     "mongodb+srv://Sakshi:123@cluster0.79ts7.mongodb.net/test?retryWrites=true&w=majority"
   )
   .then(() => {
-    app.listen(5000);
+    app.listen(PORT)|| 5000;
   })
   .catch((err) => {
     console.log(err);
